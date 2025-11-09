@@ -1,12 +1,28 @@
-// Параметры VM
-vm-image    = "ubuntu-2204-lts"
-vm-platform_id = "standard-v3"
-vm-net-name = "default-ru-central1-b"
-vm-name     = "vm-test"
-vm-zone     = "ru-central1-b"
-vm-cpu      = 2
-vm-ram      = 2
-// Параметры диска ВМ
-disk-name = "boot-disk-1"
-disk-type = "network-hdd"
-disk-size = 20
+vm_param_list = [ 
+    # Vm-1
+    {
+        vm_name         = "vm-test-1"
+        vm_image        = "ubuntu-2204-lts"
+        vm_platform_id  = "standard-v3"
+        vm_net_name     = "default-ru-central1-b"
+        vm_zone         = "ru-central1-b"
+        vm_cpu          = 2
+        vm_ram          = 2
+        // Параметры диска ВМ
+        disk_type       = "network-hdd"
+        disk_size       = 20
+    },
+     # Vm-2
+    {
+        vm_name         = "vm-test-2"
+        vm_image        = "ubuntu-2204-lts"
+        vm_platform_id  = "standard-v3"
+        vm_net_name     = "default-ru-central1-b"
+        vm_zone         = "ru-central1-b"
+        vm_cpu          = 2
+        vm_ram          = 2
+        // Параметры диска ВМ
+        disk_type       = "network-hdd"
+        disk_size       = 20
+    }
+]
