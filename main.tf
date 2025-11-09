@@ -1,46 +1,43 @@
-
-data "yandex_compute_image" "my_image" {
-    for_each = { for vm in var.vm_param_list : vm.vm_name => vm}
-    family = each.value.vm_image
+module "vpc_1" {
+    source = "./modules/vpc"
+    vm_zone = "ru-central1-b"
+    // Параметры диска
+    disk_name = ""
+    disk_type = "network-hdd"
+    disk_size = 20
+    // Параметры ВМ
+    vm_name = "vm-test-1"
+    vm_platform_id = "standard-v3"
+    vm_cpu = 2
+    vm_ram = 2
 }
 
-data "yandex_vpc_subnet" "default" {
-    for_each = { for vm in var.vm_param_list : vm.vm_name => vm}
-    name = each.value.vm_net_name
+module "vpc_2" {
+    source = "./modules/vpc"
+    vm_zone = "ru-central1-b"
+    // Параметры диска
+    disk_name = ""
+    disk_type = "network-hdd"
+    disk_size = 25
+    // Параметры ВМ
+    vm_name = "vm-test-2"
+    vm_platform_id = "standard-v3"
+    vm_cpu = 2
+    vm_ram = 2
 }
 
-resource "yandex_compute_disk" "boot-disk" {
-    for_each = { for vm in var.vm_param_list : vm.vm_name => vm}
-    name     = "${each.value.vm_name}-boot"
-    type     = each.value.disk_type
-    zone     = each.value.vm_zone
-    size     = each.value.disk_size
-    image_id = data.yandex_compute_image.my_image[each.key].id
+output "vpc_1_public_ip" {
+    value = module.vpc_1.private_ip_vm
 }
 
-resource "yandex_compute_instance" "vm" {
-    for_each = { for vm in var.vm_param_list : vm.vm_name => vm}
-    name                      = each.value.vm_name
-    allow_stopping_for_update = true
-    platform_id               = each.value.vm_platform_id
-    zone                      = each.value.vm_zone
+output "vpc_1_private_ip" {
+    value = module.vpc_1.private_ip_vm
+}
 
-    resources {
-        cores  = each.value.vm_cpu
-        memory = each.value.vm_ram
-    }
+output "vpc_2_public_ip" {
+    value = module.vpc_2.private_ip_vm
+}
 
-    boot_disk {
-        auto_delete = true
-        disk_id     = yandex_compute_disk.boot-disk[each.key].id
-    }
-
-    network_interface {
-        subnet_id = data.yandex_vpc_subnet.default[each.key].id
-        nat       = true
-    }
-
-    metadata = {
-        user-data = "${file("meta.txt")}"
-    }
+output "vpc_2_private_ip" {
+    value = module.vpc_2.private_ip_vm
 }

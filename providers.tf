@@ -14,9 +14,3 @@ terraform {
 provider "yandex" {
   zone = "ru-central1-b"
 }
-
-# Провайдер yandex (зона доступности ru-central-a)
-provider "yandex" {
-  alias = "central-a"
-  zone  = "ru-central1-a"
-}
